@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The page title and description are filled in from content.js -->
+  <title>Dentist</title>
+  <meta name="description" content="Personal website of a general dentist.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#0f6e74" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1b1e" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <!-- All personal details live in content.js -->
+  <script src="content.js" defer></script>
+  <script src="assets/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" data-field="fullName"></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#qualifications">Qualifications</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a class="nav-cta" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section id="top" class="hero" aria-labelledby="hero-name">
+      <div class="container hero-inner">
+        <div class="avatar" id="avatar" aria-hidden="true"></div>
+        <div class="hero-text">
+          <p class="eyebrow" data-field="title">Dentist</p>
+          <h1 id="hero-name" data-field="fullName"></h1>
+          <p class="tagline" data-field="tagline"></p>
+          <p class="location">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+            <span id="location-text"></span>
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#contact">Get in touch</a>
+            <a class="btn btn-ghost" href="#services">Services</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="container narrow">
+        <h2 id="about-heading">About</h2>
+        <div id="about-text" class="prose"></div>
+      </div>
+    </section>
+
+    <!-- Qualifications & training -->
+    <section id="qualifications" class="section section-alt" aria-labelledby="qual-heading">
+      <div class="container">
+        <h2 id="qual-heading">Qualifications &amp; training</h2>
+        <ul id="qualifications-list" class="card-list"></ul>
+        <p class="registration" id="registration-line">
+          <strong>Registration:</strong> <span data-field="registration"></span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Services / clinical interests -->
+    <section id="services" class="section" aria-labelledby="services-heading">
+      <div class="container">
+        <h2 id="services-heading">Services &amp; clinical interests</h2>
+        <p class="section-intro">General dentistry for adults and families. Every treatment starts with an examination and a conversation about the options that suit you.</p>
+        <ul id="services-list" class="services-grid"></ul>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section id="experience" class="section section-alt" aria-labelledby="exp-heading">
+      <div class="container narrow">
+        <h2 id="exp-heading">Experience</h2>
+        <ol id="experience-list" class="timeline"></ol>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container narrow">
+        <h2 id="contact-heading">Contact</h2>
+        <p class="section-intro">For appointments or questions, message me directly. In a dental emergency with severe swelling, difficulty breathing or swallowing, or heavy bleeding, contact your local emergency services.</p>
+        <ul class="contact-list" id="contact-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> <span data-field="fullName"></span> &middot; <span data-field="title">Dentist</span></p>
+      <p class="disclaimer">The information on this website is general and is not a substitute for an individual dental consultation.</p>
+    </div>
+  </footer>
+</body>
+</html>
