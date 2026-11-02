@@ -539,3 +539,27 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 .footer-legal-end { text-align: left; }
 @media (min-width: 800px) { .footer-legal-end { text-align: right; } }
 .site-footer .footer-legal a { text-decoration: underline; }
+
+/* ===== NHS & private ===== */
+.care-grid { display: grid; gap: 1.25rem; }
+@media (min-width: 800px) { .care-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; } }
+.care-card {
+  position: relative; padding: 2rem 1.75rem 1.75rem;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.care-card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: var(--accent); }
+.care-card-private::before { background: var(--sand); }
+.care-title { font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; margin-bottom: 1.1rem; }
+.care-points { display: grid; gap: .8rem; margin-bottom: 1.25rem; }
+.care-points li { display: flex; gap: .65rem; align-items: flex-start; }
+.care-check { width: 22px; height: 22px; flex: none; color: var(--accent); margin-top: .1rem; }
+.care-card-private .care-check { color: var(--sand); }
+.care-days { padding: .8rem 1rem; background: var(--tint); border-radius: var(--radius-sm); font-size: .95rem; color: var(--muted); }
+.care-days strong { color: var(--ink); }
+.care-card p:last-child { margin-bottom: 0; }
+.care-note {
+  display: flex; gap: .75rem; align-items: flex-start; margin: 1.5rem 0 0; padding: 1.1rem 1.25rem;
+  background: var(--accent-soft); border-radius: var(--radius-sm); color: var(--ink); font-size: .98rem;
+}
+.care-note .icon { width: 24px; height: 24px; color: var(--accent); margin-top: .05rem; }

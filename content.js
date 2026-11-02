@@ -40,7 +40,7 @@ window.SITE = {
   /* Short facts shown as small badges under your name (keep them short). */
   heroBadges: [
     "[Years of experience, e.g. 5+ years' experience]",
-    "[Who you see, e.g. NHS & private patients]"
+    "NHS & private patients"
   ],
 
   /* Optional photo. Put the image in the "assets" folder and write its
@@ -102,6 +102,27 @@ window.SITE = {
     { icon: "whitening",  name: "Teeth whitening",          text: "Lightening the natural shade of teeth after an examination to check whether whitening is suitable for you. In the UK, whitening may only be provided by a registered dental professional." }
   ],
 
+  /* ---------- NHS & private care ----------
+     Shown as two cards side by side. Edit the points freely.
+     nhsDays / privateDays: which days you see each type of patient,
+     e.g. "Monday – Thursday". Leave "" to hide that line.
+     nhsChargesLink: the official NHS page on charges (this one is for
+     England; Wales, Scotland and Northern Ireland have their own). */
+  careIntro: "I see both NHS and private patients at the practice.",
+  nhs: [
+    "Treatment that is clinically necessary to keep your mouth, teeth and gums healthy.",
+    "Set national charges in three bands, per course of treatment.",
+    "Free for some patients, for example under-18s, and pregnant women or those who have had a baby in the last 12 months."
+  ],
+  nhsDays: "[NHS days, e.g. Monday – Thursday]",
+  nhsChargesLink: "https://www.nhs.uk/nhs-services/dentists/how-much-will-i-pay-for-nhs-dental-treatment/",
+  private: [
+    "Cosmetic treatments that are not available on the NHS, such as teeth whitening.",
+    "Some materials and techniques that are not available on the NHS.",
+    "Fees set by the practice and agreed with you before treatment starts."
+  ],
+  privateDays: "[Private days, e.g. Friday and Saturday]",
+
   /* ---------- Your first visit (steps) ---------- */
   firstVisit: [
     { title: "Book",                  text: "Contact the practice by phone, email or online booking to arrange a convenient time." },
@@ -119,8 +140,8 @@ window.SITE = {
   /* ---------- Frequently asked questions (edit or delete freely) ---------- */
   faqs: [
     {
-      q: "Do you see NHS or private patients?",
-      a: "[Explain whether you see NHS patients, private patients or both, and where patients can find the practice fees.]"
+      q: "Can I have some treatment on the NHS and some privately?",
+      a: "Yes. Treatment that is clinically necessary is available on the NHS. You can also choose to have some items privately, for example a different material or a cosmetic treatment. Your treatment plan will show clearly which parts are NHS and which are private, and what each costs."
     },
     {
       q: "What happens at a first appointment?",
@@ -153,7 +174,7 @@ window.SITE = {
      Leave any of them "" to hide it. */
   address: "[Practice address, including postcode]",
   mapLink: "[Google Maps link]",
-  patients: "[NHS, private, or both]",
+  patients: "NHS and private",
   feesLink: "[Link to the practice fee guide]",
   complaintsLink: "[Link to the practice complaints policy]",
   hours: [

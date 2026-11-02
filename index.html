@@ -37,8 +37,8 @@
         <ul>
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
+          <li><a href="#fees">NHS &amp; private</a></li>
           <li><a href="#journey">First visit</a></li>
-          <li><a href="#credentials">Experience</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -119,6 +119,35 @@
           <p class="section-intro">General dentistry for adults and families. Every treatment starts with an examination and a conversation about the options that suit you.</p>
         </div>
         <ul id="services-list" class="services-grid"></ul>
+      </div>
+    </section>
+
+    <!-- ===== NHS & private ===== -->
+    <section id="fees" class="section" aria-labelledby="fees-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">NHS &amp; private</p>
+          <h2 id="fees-heading" class="section-title">Two ways to be seen</h2>
+          <p class="section-intro" data-field="careIntro"></p>
+        </div>
+        <div class="care-grid">
+          <article class="care-card care-card-nhs reveal">
+            <h3 class="care-title">NHS treatment</h3>
+            <ul class="care-points" id="nhs-points"></ul>
+            <p class="care-days" id="nhs-days-line"><strong>NHS appointments:</strong> <span data-field="nhsDays"></span></p>
+            <p id="nhs-link-wrap"><a class="link-arrow" id="nhs-link" href="#" target="_blank" rel="noopener noreferrer">Current NHS dental charges <span aria-hidden="true">→</span></a></p>
+          </article>
+          <article class="care-card care-card-private reveal">
+            <h3 class="care-title">Private treatment</h3>
+            <ul class="care-points" id="private-points"></ul>
+            <p class="care-days" id="private-days-line"><strong>Private appointments:</strong> <span data-field="privateDays"></span></p>
+            <p id="private-link-wrap"><a class="link-arrow" id="private-link" href="#" target="_blank" rel="noopener noreferrer">Private fee guide <span aria-hidden="true">→</span></a></p>
+          </article>
+        </div>
+        <p class="care-note reveal">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
+          <span>Before any treatment, you will be told which options are available on the NHS and which are private, and given a treatment plan with the costs, so you can choose.</span>
+        </p>
       </div>
     </section>
 
@@ -268,6 +297,7 @@
       <div class="footer-legal">
         <p><span data-field="fullName"></span> &middot; <span class="js-credentials"></span></p>
         <p id="courtesy-note" hidden></p>
+        <p>Regulated by the General Dental Council (GDC). Professional rules: <a href="https://www.gdc-uk.org/standards-guidance/standards-and-guidance/standards-for-the-dental-team" target="_blank" rel="noopener noreferrer">GDC Standards for the Dental Team</a>.</p>
         <p>The information on this website is general and is not a substitute for an individual dental consultation.</p>
       </div>
       <div class="footer-legal footer-legal-end">

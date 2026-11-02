@@ -39,7 +39,9 @@ Until a placeholder is filled in, the site shows it with a **dashed yellow outli
 - [ ] `qualifications`: degree, [University], [Graduation year], the year you passed the ORE, plus any further training
 - [ ] `experience`: job title, place, years, short description for each role
 - [ ] `services`: check the 8 general-dentistry entries; delete any you don't offer and edit the wording
-- [ ] `firstVisit` and `faqs`: check the wording matches how your practice works (the first FAQ, about NHS and private patients, needs your own answer)
+- [ ] `nhsDays`, `privateDays`: which days you see NHS and private patients (or `""` to hide); check the `nhs` / `private` points and `careIntro`
+- [ ] `nhsChargesLink`: already set to the NHS England charges page; change it if the practice is in Wales, Scotland or Northern Ireland
+- [ ] `firstVisit` and `faqs`: check the wording matches how your practice works
 - [ ] `reviews` (optional): genuine patient reviews only, with permission; the section stays hidden while the list is empty
 - [ ] `address`, `mapLink`, `patients`, `feesLink`, `complaintsLink`, `hours`: practice details
 - [ ] `bookingUrl`: the practice's online booking page, or `""` (the Book buttons then scroll to the contact options)
@@ -53,6 +55,8 @@ Until a placeholder is filled in, the site shows it with a **dashed yellow outli
 - Gives urgent-care advice in line with NHS guidance: **NHS 111** when the practice is closed, **999 / A&E** for swelling that affects breathing, swallowing, speech, the eye or the neck.
 - Includes spaces for the practice address, NHS/private status, a fee-guide link, a complaints-policy link and a "last updated" date.
 - Leaves the reviews section hidden until you add genuine reviews.
+- Has an "NHS & private" section for a mixed practice. It explains what each covers, links to the official NHS charges, and says patients get a treatment plan with costs before treatment.
+- States in the footer that you are regulated by the GDC and links to the GDC *Standards for the Dental Team*, as the Electronic Commerce Regulations 2002 (regulation 6) expect for regulated professions.
 
 Before going live, ask your practice (or your indemnity provider) to check the wording. The practice may have its own rules for associate websites.
 

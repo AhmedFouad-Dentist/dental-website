@@ -237,6 +237,23 @@
     if (!services.children.length) services.closest("section").hidden = true;
   }
 
+  /* ---------- NHS & private cards ---------- */
+  [["nhs-points", S.nhs], ["private-points", S["private"]]].forEach(function (pair) {
+    var ul = byId(pair[0]);
+    if (!ul) return;
+    list(pair[1]).forEach(function (text) {
+      if (isEmpty(text)) return;
+      var li = el("li");
+      li.appendChild(icon("check", "care-check"));
+      li.appendChild(el("span", null, text));
+      ul.appendChild(li);
+    });
+    if (!ul.children.length) ul.closest(".care-card").hidden = true;
+  });
+  if (isEmpty(S.nhsDays)) byId("nhs-days-line").hidden = true;
+  if (isEmpty(S.privateDays)) byId("private-days-line").hidden = true;
+  if (!list(S.nhs).length && !list(S["private"]).length) byId("fees").hidden = true;
+
   /* ---------- First visit steps ---------- */
   var journey = byId("journey-list");
   if (journey) {
@@ -326,6 +343,8 @@
   optionalLink("map-link", "map-link-wrap", S.mapLink);
   optionalLink("fees-link", "fees-link-wrap", S.feesLink);
   optionalLink("complaints-link", "complaints-wrap", S.complaintsLink);
+  optionalLink("nhs-link", "nhs-link-wrap", S.nhsChargesLink);
+  optionalLink("private-link", "private-link-wrap", S.feesLink);
   if (isEmpty(S.patients)) byId("patients-line").hidden = true;
 
   var hours = byId("hours-list");
