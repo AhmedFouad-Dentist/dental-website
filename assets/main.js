@@ -100,6 +100,42 @@
     if (meta) meta.setAttribute("content", S.tagline);
   }
 
+  /* ---------- Qualification & GDC number: "BDS (Egypt) · GDC No. 123456" ---------- */
+  document.querySelectorAll(".js-credentials").forEach(function (node) {
+    var parts = [];
+    if (!isEmpty(S.qualification)) {
+      var q = el("span", null, S.qualification);
+      if (!isEmpty(S.qualificationCountry)) {
+        q = el("span");
+        q.appendChild(el("span", null, S.qualification));
+        q.appendChild(document.createTextNode(" ("));
+        q.appendChild(el("span", null, S.qualificationCountry));
+        q.appendChild(document.createTextNode(")"));
+      }
+      parts.push(q);
+    }
+    if (!isEmpty(S.gdcNumber)) {
+      var g = el("span");
+      g.appendChild(document.createTextNode("GDC No. "));
+      g.appendChild(el("span", null, S.gdcNumber));
+      parts.push(g);
+    }
+    parts.forEach(function (part, i) {
+      if (i > 0) node.appendChild(document.createTextNode(" · "));
+      node.appendChild(part);
+    });
+    if (!parts.length) node.hidden = true;
+  });
+
+  /* "Dr" is a courtesy title for dentists in the UK, so say so. */
+  var courtesy = byId("courtesy-note");
+  if (courtesy && isFilled(name) && /^dr\.?\s/i.test(name)) {
+    var plainName = name.replace(/^dr\.?\s+/i, "");
+    courtesy.textContent = "\u201CDr\u201D is used as a courtesy title. " + plainName +
+      " is a dentist and does not hold a medical qualification.";
+    courtesy.hidden = false;
+  }
+
   /* ---------- Location: "City, Country" ---------- */
   var locationText = byId("location-text");
   if (locationText) {
@@ -230,10 +266,6 @@
       quals.appendChild(timelineItem(q.year, q.title, q.place));
     });
   }
-  if (isEmpty(S.registration)) {
-    var reg = byId("registration-line");
-    if (reg) reg.hidden = true;
-  }
 
   var exp = byId("experience-list");
   if (exp) {
@@ -276,20 +308,25 @@
     if (!faq.children.length) faq.closest("section").hidden = true;
   }
 
-  /* ---------- Clinic: map link & hours ---------- */
-  var mapLink = byId("map-link");
-  if (mapLink) {
-    if (isFilled(S.mapLink)) {
-      mapLink.href = S.mapLink;
-    } else if (isPlaceholder(S.mapLink)) {
+  /* ---------- Practice links: map, fees, complaints ---------- */
+  function optionalLink(linkId, wrapId, value) {
+    var link = byId(linkId);
+    var wrap = byId(wrapId);
+    if (!link || !wrap) return;
+    if (isFilled(value)) {
+      link.href = value;
+    } else if (isPlaceholder(value)) {
       // Not filled yet: show the placeholder text instead of a dead link.
-      var wrap = byId("map-link-wrap");
       wrap.textContent = "";
-      wrap.appendChild(el("span", null, S.mapLink));
+      wrap.appendChild(el("span", null, value));
     } else {
-      byId("map-link-wrap").hidden = true;
+      wrap.hidden = true;
     }
   }
+  optionalLink("map-link", "map-link-wrap", S.mapLink);
+  optionalLink("fees-link", "fees-link-wrap", S.feesLink);
+  optionalLink("complaints-link", "complaints-wrap", S.complaintsLink);
+  if (isEmpty(S.patients)) byId("patients-line").hidden = true;
 
   var hours = byId("hours-list");
   if (hours) {
@@ -312,12 +349,14 @@
   var phoneUrl = isFilled(contact.phone) ? "tel:" + String(contact.phone).replace(/[^\d+]/g, "") : null;
 
   var channels = [
-    { key: "whatsapp",  label: "WhatsApp",  sprite: "i-whatsapp",  value: contact.whatsapp,
-      display: function (v) { return "+" + digits(v); }, href: function () { return whatsappUrl; } },
+    { key: "booking",   label: "Book online", sprite: "i-calendar", value: S.bookingUrl,
+      display: function () { return "Choose a time"; }, href: function (v) { return v; } },
     { key: "phone",     label: "Phone",     sprite: "i-phone",     value: contact.phone,
       display: function (v) { return v; }, href: function () { return phoneUrl; } },
     { key: "email",     label: "Email",     sprite: "i-mail",      value: contact.email,
       display: function (v) { return v; }, href: function (v) { return "mailto:" + v; } },
+    { key: "whatsapp",  label: "WhatsApp",  sprite: "i-whatsapp",  value: contact.whatsapp,
+      display: function (v) { return "+" + digits(v); }, href: function () { return whatsappUrl; } },
     { key: "instagram", label: "Instagram", sprite: "i-instagram", value: contact.instagram,
       display: function (v) { return "@" + String(v).replace(/^@/, ""); },
       href: function (v) { return "https://www.instagram.com/" + encodeURIComponent(String(v).replace(/^@/, "")) + "/"; } }
@@ -333,7 +372,7 @@
       var card = el(filled ? "a" : "div", "contact-card");
       if (filled) {
         card.href = c.href(c.value);
-        if (c.key === "whatsapp" || c.key === "instagram") {
+        if (c.key !== "phone" && c.key !== "email") {
           card.target = "_blank";
           card.rel = "noopener noreferrer";
         }
@@ -350,11 +389,11 @@
     });
   }
 
-  // Every "Book on WhatsApp" button opens WhatsApp once a number is set;
-  // until then they scroll to the contact section.
-  if (whatsappUrl) {
-    document.querySelectorAll(".js-whatsapp").forEach(function (a) {
-      a.href = whatsappUrl;
+  // "Book" buttons open the online booking page once it is set;
+  // otherwise they scroll to the contact options.
+  if (isFilled(S.bookingUrl)) {
+    document.querySelectorAll(".js-book").forEach(function (a) {
+      a.href = S.bookingUrl;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
     });

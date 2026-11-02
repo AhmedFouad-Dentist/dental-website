@@ -1,6 +1,8 @@
 # dental-website
 
-Personal website for a dentist: a plain static site (HTML + CSS + a little JavaScript) with no build step. Fonts (Fraunces and Plus Jakarta Sans) load from Google Fonts. It works on GitHub Pages exactly as it is.
+Personal website for a dentist working in the **United Kingdom**. It's a plain static site (HTML + CSS + a little JavaScript) with no build step. Fonts (Fraunces and Plus Jakarta Sans) load from Google Fonts. It works on GitHub Pages exactly as it is.
+
+> **Do not publish yet.** In the UK it is a criminal offence for anyone not on the General Dental Council (GDC) register to use the title "dentist" or to imply they are a registered dentist (Dentists Act 1984, section 39). Keep GitHub Pages **off** until your GDC registration is confirmed. See the checklist below.
 
 ## Files
 
@@ -17,45 +19,56 @@ Personal website for a dentist: a plain static site (HTML + CSS + a little JavaS
 
 1. Open `content.js` (on GitHub: click the file, then the ✏️ pencil icon).
 2. Replace every value in `[square brackets]` with your real information, brackets included.
-   Example: `fullName: "[Full name]"` → `fullName: "Dr. First Last"`.
+   Example: `fullName: "[Full name]"` → `fullName: "Dr First Last"`.
 3. Keep the quotation marks `"..."` and the commas at the end of lines.
-4. To hide an optional item, set it to `""`. To remove an entry from a list (a qualification, a job or a service), delete it from `{` to `}` along with its comma.
-5. Click **Commit changes**. The live site updates within a minute or two.
+4. To hide an optional item, set it to `""`. To remove an entry from a list (a qualification, a job, a service or an FAQ), delete it from `{` to `}` along with its comma.
+5. Click **Commit changes**.
 
 Until a placeholder is filled in, the site shows it with a **dashed yellow outline** so you can see what's missing.
 
 ### Placeholders to fill (TODO)
 
-- [ ] `fullName`: [Full name]
+- [ ] `fullName`: [Full name] (UK style: `Dr First Last`, no full stop)
 - [ ] `tagline`: one-sentence introduction
-- [ ] `clinicName`, `city`, `country`: [Clinic name], [City], [Country]
-- [ ] `heroBadges`: three short facts under your name ([Degree], [University], [Years of experience])
+- [ ] `clinicName`, `city`: [Practice name], [Town or city]
+- [ ] `qualification`, `qualificationCountry`, `gdcNumber`: e.g. BDS, [Country of qualification], [GDC number]
+- [ ] `heroBadges`: two short facts under your name
 - [ ] `photo` (optional): add e.g. `assets/photo.jpg` (portrait shape works best) and write its path; otherwise your initials are shown
 - [ ] `aboutQuote` and `about`: one short sentence plus two short paragraphs
 - [ ] `values`: check the four "what to expect" points; edit or delete
-- [ ] `qualifications`: degree, [University], [Graduation year], plus any further training
-- [ ] `registration` (optional): registration body and number, or `""` to hide
-- [ ] `experience`: job title, [Clinic name], [City], years, short description for each role
+- [ ] `qualifications`: degree, [University], [Graduation year], the year you passed the ORE, plus any further training
+- [ ] `experience`: job title, place, years, short description for each role
 - [ ] `services`: check the 8 general-dentistry entries; delete any you don't offer and edit the wording
-- [ ] `firstVisit` and `faqs`: check the general wording matches how you work
+- [ ] `firstVisit` and `faqs`: check the wording matches how your practice works (the first FAQ, about NHS and private patients, needs your own answer)
 - [ ] `reviews` (optional): genuine patient reviews only, with permission; the section stays hidden while the list is empty
-- [ ] `address`, `mapLink`, `hours`: [Clinic address], [Google Maps link], opening days and times
-- [ ] `contact.whatsapp`: [WhatsApp number], international format, digits only (country code first, no `+`, no leading `0`)
-- [ ] `contact.phone`: [Phone number], or `""` to hide the Call button
-- [ ] `contact.email`: [Email]
-- [ ] `contact.instagram`: [Instagram username], without `@`
+- [ ] `address`, `mapLink`, `patients`, `feesLink`, `complaintsLink`, `hours`: practice details
+- [ ] `bookingUrl`: the practice's online booking page, or `""` (the Book buttons then scroll to the contact options)
+- [ ] `contact.phone`, `contact.email`, `contact.instagram`; `contact.whatsapp` is optional and hidden while `""`
+- [ ] `lastUpdated`: month and year, e.g. `March 2027`
 
-Once the WhatsApp number is filled in, every "Book" button on the site opens a WhatsApp chat with a ready-typed message (`whatsappMessage`).
+## What the site already does for UK rules
 
-## Turning on GitHub Pages (one-time)
+- Shows your **qualification, the country it is from, and your GDC number** under your name, in the Background section and in the footer, as GDC advertising guidance asks. It also links to the [GDC online register](https://olr.gdc-uk.org/) so patients can check.
+- If your name starts with **"Dr"**, it automatically adds a footer note that "Dr" is a courtesy title and that you do not hold a medical qualification.
+- Gives urgent-care advice in line with NHS guidance: **NHS 111** when the practice is closed, **999 / A&E** for swelling that affects breathing, swallowing, speech, the eye or the neck.
+- Includes spaces for the practice address, NHS/private status, a fee-guide link, a complaints-policy link and a "last updated" date.
+- Leaves the reviews section hidden until you add genuine reviews.
 
-1. On GitHub, open this repository → **Settings** → **Pages** (left sidebar).
-2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
-3. Set **Branch** to `main` and folder to `/ (root)`, then click **Save**.
-4. After about a minute, the address appears at the top of that page, usually
-   `https://<your-github-username>.github.io/dental-website/`.
+Before going live, ask your practice (or your indemnity provider) to check the wording. The practice may have its own rules for associate websites.
 
-After this, every change committed to `main` is published automatically.
+## Before going live: checklist
+
+1. Pass ORE Part 2.
+2. Your **GDC registration is confirmed**, and you appear on the [GDC online register](https://olr.gdc-uk.org/).
+3. Fill in every placeholder in `content.js`, including `gdcNumber`.
+4. Then turn on GitHub Pages:
+   1. On GitHub, open this repository → **Settings** → **Pages** (left sidebar).
+   2. Under **Build and deployment**, set **Source** to **Deploy from a branch**.
+   3. Set **Branch** to `main` and folder to `/ (root)`, then click **Save**.
+   4. After about a minute, the address appears at the top of that page, usually
+      `https://<your-github-username>.github.io/dental-website/`.
+
+Note: this repository is public, so anything committed here can be seen even before Pages is turned on. You may prefer to add your personal details only when you are ready to publish.
 
 ## Previewing locally
 

@@ -526,3 +526,16 @@ body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
 /* ===== Scroll reveal (only when JS + motion allowed) ===== */
 .js-reveal .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
 .js-reveal .reveal.is-visible { opacity: 1; transform: none; }
+
+/* ===== UK registration details ===== */
+.credential-line {
+  margin: -.4rem 0 1.1rem; font-size: 1rem; font-weight: 600; color: var(--accent);
+  letter-spacing: .01em;
+}
+.registration a { font-weight: 600; }
+.visit-card .visit-meta { color: var(--ink); }
+.footer-legal { max-width: 40rem; }
+.footer-legal p { margin: 0 0 .35rem; }
+.footer-legal-end { text-align: left; }
+@media (min-width: 800px) { .footer-legal-end { text-align: right; } }
+.site-footer .footer-legal a { text-decoration: underline; }
