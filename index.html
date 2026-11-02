@@ -2,14 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- The page title and description are filled in from content.js -->
   <title>Dentist</title>
   <meta name="description" content="Personal website of a general dentist.">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#0f6e74" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1b1e" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fbf9f6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0c1a1c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="assets/style.css">
   <!-- All personal details live in content.js -->
   <script src="content.js" defer></script>
@@ -18,97 +21,275 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
+  <!-- ===== Header ===== -->
+  <header class="site-header" id="site-header">
     <div class="container header-inner">
-      <a class="brand" href="#top" data-field="fullName"></a>
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><use href="#i-tooth"/></svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name" data-field="fullName"></span>
+          <span class="brand-role" data-field="title">Dentist</span>
+        </span>
+      </a>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#journey">First visit</a></li>
+          <li><a href="#credentials">Experience</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-primary btn-sm header-cta js-whatsapp" href="#contact">Book appointment</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <span class="nav-toggle-bar" aria-hidden="true"></span>
         <span class="visually-hidden">Menu</span>
       </button>
-      <nav id="site-nav" class="site-nav" aria-label="Main">
-        <ul>
-          <li><a href="#about">About</a></li>
-          <li><a href="#qualifications">Qualifications</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a class="nav-cta" href="#contact">Contact</a></li>
-        </ul>
-      </nav>
     </div>
   </header>
 
   <main id="main">
-    <!-- Hero -->
+    <!-- ===== Hero ===== -->
     <section id="top" class="hero" aria-labelledby="hero-name">
+      <div class="hero-bg" aria-hidden="true"></div>
       <div class="container hero-inner">
-        <div class="avatar" id="avatar" aria-hidden="true"></div>
-        <div class="hero-text">
-          <p class="eyebrow" data-field="title">Dentist</p>
-          <h1 id="hero-name" data-field="fullName"></h1>
-          <p class="tagline" data-field="tagline"></p>
-          <p class="location">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
-            <span id="location-text"></span>
-          </p>
+        <div class="hero-text reveal">
+          <p class="eyebrow"><span data-field="title">Dentist</span><span class="eyebrow-sep" aria-hidden="true"></span><span data-field="city"></span></p>
+          <h1 id="hero-name" class="display" data-field="fullName"></h1>
+          <p class="lead" data-field="tagline"></p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#contact">Get in touch</a>
-            <a class="btn btn-ghost" href="#services">Services</a>
+            <a class="btn btn-primary btn-lg js-whatsapp" href="#contact">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+              Book on WhatsApp
+            </a>
+            <a class="btn btn-ghost btn-lg" href="#services">Explore services</a>
+          </div>
+          <ul class="badges" id="hero-badges" aria-label="Highlights"></ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="portrait" id="avatar"></div>
+          <div class="float-card float-card-location">
+            <span class="float-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg></span>
+            <span>
+              <span class="float-label" data-field="clinicName"></span>
+              <span class="float-sub" id="location-text"></span>
+            </span>
+          </div>
+          <div class="float-card float-card-quote" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><use href="#i-smile"/></svg>
+            <span data-field="heroNote"></span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- About -->
+    <!-- ===== Values strip ===== -->
+    <section class="values" aria-label="What to expect">
+      <div class="container">
+        <ul class="values-grid" id="values-list"></ul>
+      </div>
+    </section>
+
+    <!-- ===== About ===== -->
     <section id="about" class="section" aria-labelledby="about-heading">
-      <div class="container narrow">
-        <h2 id="about-heading">About</h2>
-        <div id="about-text" class="prose"></div>
+      <div class="container about-grid">
+        <div class="about-aside reveal">
+          <p class="kicker">About</p>
+          <h2 id="about-heading" class="section-title">Meet your dentist</h2>
+          <blockquote class="pull-quote"><p data-field="aboutQuote"></p></blockquote>
+        </div>
+        <div class="about-body reveal">
+          <div id="about-text" class="prose"></div>
+          <a class="link-arrow" href="#credentials">Qualifications &amp; experience <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
 
-    <!-- Qualifications & training -->
-    <section id="qualifications" class="section section-alt" aria-labelledby="qual-heading">
+    <!-- ===== Services ===== -->
+    <section id="services" class="section section-tint" aria-labelledby="services-heading">
       <div class="container">
-        <h2 id="qual-heading">Qualifications &amp; training</h2>
-        <ul id="qualifications-list" class="card-list"></ul>
-        <p class="registration" id="registration-line">
-          <strong>Registration:</strong> <span data-field="registration"></span>
-        </p>
-      </div>
-    </section>
-
-    <!-- Services / clinical interests -->
-    <section id="services" class="section" aria-labelledby="services-heading">
-      <div class="container">
-        <h2 id="services-heading">Services &amp; clinical interests</h2>
-        <p class="section-intro">General dentistry for adults and families. Every treatment starts with an examination and a conversation about the options that suit you.</p>
+        <div class="section-head reveal">
+          <p class="kicker">Services</p>
+          <h2 id="services-heading" class="section-title">Care for every stage of your smile</h2>
+          <p class="section-intro">General dentistry for adults and families. Every treatment starts with an examination and a conversation about the options that suit you.</p>
+        </div>
         <ul id="services-list" class="services-grid"></ul>
       </div>
     </section>
 
-    <!-- Experience -->
-    <section id="experience" class="section section-alt" aria-labelledby="exp-heading">
-      <div class="container narrow">
-        <h2 id="exp-heading">Experience</h2>
-        <ol id="experience-list" class="timeline"></ol>
+    <!-- ===== First visit ===== -->
+    <section id="journey" class="section" aria-labelledby="journey-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Your first visit</p>
+          <h2 id="journey-heading" class="section-title">What happens when you come in</h2>
+        </div>
+        <ol id="journey-list" class="steps"></ol>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section" aria-labelledby="contact-heading">
-      <div class="container narrow">
-        <h2 id="contact-heading">Contact</h2>
-        <p class="section-intro">For appointments or questions, message me directly. In a dental emergency with severe swelling, difficulty breathing or swallowing, or heavy bleeding, contact your local emergency services.</p>
-        <ul class="contact-list" id="contact-list"></ul>
+    <!-- ===== Qualifications & experience ===== -->
+    <section id="credentials" class="section section-tint" aria-labelledby="cred-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Background</p>
+          <h2 id="cred-heading" class="section-title">Qualifications &amp; experience</h2>
+        </div>
+        <div class="cred-grid">
+          <div class="cred-col reveal">
+            <h3 class="col-title" id="qualifications">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-cap"/></svg>
+              Qualifications &amp; training
+            </h3>
+            <ol id="qualifications-list" class="timeline"></ol>
+            <p class="registration" id="registration-line">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
+              <span><strong>Registration:</strong> <span data-field="registration"></span></span>
+            </p>
+          </div>
+          <div class="cred-col reveal">
+            <h3 class="col-title" id="experience">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-briefcase"/></svg>
+              Experience
+            </h3>
+            <ol id="experience-list" class="timeline"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Reviews (hidden until real reviews are added) ===== -->
+    <section id="reviews" class="section" aria-labelledby="reviews-heading" hidden>
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Reviews</p>
+          <h2 id="reviews-heading" class="section-title">What patients say</h2>
+        </div>
+        <ul id="reviews-list" class="reviews-grid"></ul>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section id="faq" class="section" aria-labelledby="faq-heading">
+      <div class="container faq-grid">
+        <div class="section-head reveal">
+          <p class="kicker">FAQ</p>
+          <h2 id="faq-heading" class="section-title">Common questions</h2>
+          <p class="section-intro">Can't find your answer? Send a message and I'll be happy to help.</p>
+          <a class="btn btn-ghost js-whatsapp" href="#contact">Ask a question</a>
+        </div>
+        <div id="faq-list" class="faq-list reveal"></div>
+      </div>
+    </section>
+
+    <!-- ===== Visit & contact ===== -->
+    <section id="contact" class="section section-tint" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <div class="cta-text">
+            <p class="kicker kicker-light">Book an appointment</p>
+            <h2 id="contact-heading" class="section-title">Ready when you are</h2>
+            <p>Message me on WhatsApp for the quickest reply, or use any of the options below.</p>
+            <a class="btn btn-light btn-lg js-whatsapp" href="#contact-list">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+              Chat on WhatsApp
+            </a>
+          </div>
+          <ul class="contact-list" id="contact-list"></ul>
+        </div>
+
+        <div class="visit-grid">
+          <div class="visit-card reveal">
+            <h3 class="col-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pin"/></svg>
+              Clinic
+            </h3>
+            <p class="visit-strong" data-field="clinicName"></p>
+            <p data-field="address"></p>
+            <p id="map-link-wrap"><a class="link-arrow" id="map-link" href="#" target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">→</span></a></p>
+          </div>
+          <div class="visit-card reveal" id="hours-card">
+            <h3 class="col-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-clock"/></svg>
+              Opening hours
+            </h3>
+            <dl class="hours" id="hours-list"></dl>
+          </div>
+          <div class="visit-card visit-card-note reveal">
+            <h3 class="col-title">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-alert"/></svg>
+              Emergencies
+            </h3>
+            <p>If you have swelling spreading to your eye or neck, difficulty breathing or swallowing, or bleeding that will not stop, go to your nearest emergency department.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
+  <!-- ===== Footer ===== -->
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>&copy; <span id="year"></span> <span data-field="fullName"></span> &middot; <span data-field="title">Dentist</span></p>
-      <p class="disclaimer">The information on this website is general and is not a substitute for an individual dental consultation.</p>
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand-footer" href="#top">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-tooth"/></svg></span>
+          <span class="brand-text">
+            <span class="brand-name" data-field="fullName"></span>
+            <span class="brand-role" data-field="title">Dentist</span>
+          </span>
+        </a>
+        <p class="footer-note" data-field="tagline"></p>
+      </div>
+      <nav aria-label="Footer">
+        <h2 class="footer-title">Explore</h2>
+        <ul class="footer-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#credentials">Qualifications &amp; experience</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h2 class="footer-title">Visit</h2>
+        <p><span data-field="clinicName"></span><br><span data-field="address"></span></p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; <span id="year"></span> <span data-field="fullName"></span></p>
+      <p>The information on this website is general and is not a substitute for an individual dental consultation.</p>
     </div>
   </footer>
+
+  <!-- Mobile booking bar -->
+  <div class="mobile-bar" id="mobile-bar">
+    <a class="mobile-bar-btn js-call" href="#contact">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-phone"/></svg> Call
+    </a>
+    <a class="mobile-bar-btn mobile-bar-primary js-whatsapp" href="#contact">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"/></svg> Book on WhatsApp
+    </a>
+  </div>
+
+  <!-- Icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-tooth" viewBox="0 0 24 24"><path fill="currentColor" d="M8 2.5c-2.6 0-4.5 2.1-4.5 4.9 0 2.2.9 3.8 1.4 5.7.6 2.1.8 4.2 1.3 6.3.4 1.6.9 2.3 1.8 2.3 1.1 0 1.4-1.2 1.7-2.5.3-1.8.6-3.8 2.3-3.8s2 2 2.3 3.8c.3 1.3.6 2.5 1.7 2.5.9 0 1.4-.7 1.8-2.3.5-2.1.7-4.2 1.3-6.3.5-1.9 1.4-3.5 1.4-5.7 0-2.8-1.9-4.9-4.5-4.9-1.9 0-2.8 1-4 1s-2.1-1-4-1Z"/></symbol>
+      <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.2.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M5 3h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 7.3 7.3l1.4-2.2L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></g></symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".8" fill="currentColor" stroke="none"/></g></symbol>
+      <symbol id="i-cap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M2 9.5 12 5l10 4.5-10 4.5L2 9.5Z"/><path d="M6 11.5v4.5c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5M22 9.5V15"/></g></symbol>
+      <symbol id="i-briefcase" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 12.5h18"/></g></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/></g></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M10.3 4 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4a2 2 0 0 0-3.4 0Z"/><path d="M12 9.5v4M12 17h.01"/></g></symbol>
+      <symbol id="i-smile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8 14.5a5 5 0 0 0 8 0M9 9.5h.01M15 9.5h.01"/></g></symbol>
+    </defs>
+  </svg>
 </body>
 </html>

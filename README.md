@@ -1,6 +1,6 @@
 # dental-website
 
-Personal website for a dentist: a plain static site (HTML + CSS + a little JavaScript) with no build step. It works on GitHub Pages exactly as it is.
+Personal website for a dentist: a plain static site (HTML + CSS + a little JavaScript) with no build step. Fonts (Fraunces and Plus Jakarta Sans) load from Google Fonts. It works on GitHub Pages exactly as it is.
 
 ## Files
 
@@ -29,15 +29,23 @@ Until a placeholder is filled in, the site shows it with a **dashed yellow outli
 - [ ] `fullName`: [Full name]
 - [ ] `tagline`: one-sentence introduction
 - [ ] `clinicName`, `city`, `country`: [Clinic name], [City], [Country]
-- [ ] `photo` (optional): add e.g. `assets/photo.jpg` and write its path; otherwise your initials are shown
-- [ ] `about`: two short paragraphs
+- [ ] `heroBadges`: three short facts under your name ([Degree], [University], [Years of experience])
+- [ ] `photo` (optional): add e.g. `assets/photo.jpg` (portrait shape works best) and write its path; otherwise your initials are shown
+- [ ] `aboutQuote` and `about`: one short sentence plus two short paragraphs
+- [ ] `values`: check the four "what to expect" points; edit or delete
 - [ ] `qualifications`: degree, [University], [Graduation year], plus any further training
 - [ ] `registration` (optional): registration body and number, or `""` to hide
 - [ ] `experience`: job title, [Clinic name], [City], years, short description for each role
 - [ ] `services`: check the 8 general-dentistry entries; delete any you don't offer and edit the wording
+- [ ] `firstVisit` and `faqs`: check the general wording matches how you work
+- [ ] `reviews` (optional): genuine patient reviews only, with permission; the section stays hidden while the list is empty
+- [ ] `address`, `mapLink`, `hours`: [Clinic address], [Google Maps link], opening days and times
 - [ ] `contact.whatsapp`: [WhatsApp number], international format, digits only (country code first, no `+`, no leading `0`)
+- [ ] `contact.phone`: [Phone number], or `""` to hide the Call button
 - [ ] `contact.email`: [Email]
 - [ ] `contact.instagram`: [Instagram username], without `@`
+
+Once the WhatsApp number is filled in, every "Book" button on the site opens a WhatsApp chat with a ready-typed message (`whatsappMessage`).
 
 ## Turning on GitHub Pages (one-time)
 

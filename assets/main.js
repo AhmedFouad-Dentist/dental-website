@@ -4,6 +4,7 @@
   "use strict";
 
   var S = window.SITE || {};
+  var SVG_NS = "http://www.w3.org/2000/svg";
 
   // A value counts as a placeholder while it still contains [square brackets].
   function isPlaceholder(value) {
@@ -14,10 +15,19 @@
     return value == null || String(value).trim() === "";
   }
 
+  function isFilled(value) {
+    return !isEmpty(value) && !isPlaceholder(value);
+  }
+
   function get(path) {
     return path.split(".").reduce(function (obj, key) {
       return obj == null ? undefined : obj[key];
     }, S);
+  }
+
+  function setText(node, value) {
+    node.textContent = value == null ? "" : value;
+    node.classList.toggle("is-placeholder", isPlaceholder(value));
   }
 
   function el(tag, className, text) {
@@ -27,185 +37,349 @@
     return node;
   }
 
-  function setText(node, value) {
-    node.textContent = value == null ? "" : value;
-    node.classList.toggle("is-placeholder", isPlaceholder(value));
+  function byId(id) { return document.getElementById(id); }
+
+  function list(value) { return Array.isArray(value) ? value : []; }
+
+  // Line icons for services and values (24×24, drawn with strokes).
+  var ICONS = {
+    tooth: '<path d="M8 3c-2.5 0-4 2-4 4.5 0 2 .8 3.5 1.3 5.3.6 2 .8 4 1.2 6 .3 1.5.8 2.2 1.6 2.2 1 0 1.3-1.1 1.6-2.4.3-1.7.6-3.6 2.3-3.6s2 1.9 2.3 3.6c.3 1.3.6 2.4 1.6 2.4.8 0 1.3-.7 1.6-2.2.4-2 .6-4 1.2-6 .5-1.8 1.3-3.3 1.3-5.3C20 5 18.5 3 16 3c-1.8 0-2.6 1-4 1S9.8 3 8 3Z"/>',
+    checkup: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 6 6"/><path d="M8 10.5h5M10.5 8v5"/>',
+    filling: '<path d="M8 3c-2.5 0-4 2-4 4.5 0 2 .8 3.5 1.3 5.3.6 2 .8 4 1.2 6 .3 1.5.8 2.2 1.6 2.2 1 0 1.3-1.1 1.6-2.4.3-1.7.6-3.6 2.3-3.6s2 1.9 2.3 3.6c.3 1.3.6 2.4 1.6 2.4.8 0 1.3-.7 1.6-2.2.4-2 .6-4 1.2-6 .5-1.8 1.3-3.3 1.3-5.3C20 5 18.5 3 16 3c-1.8 0-2.6 1-4 1S9.8 3 8 3Z"/><path d="M9.5 8.5c1.6 1 3.4 1 5 0"/>',
+    rootcanal: '<path d="M8 3c-2.5 0-4 2-4 4.5 0 2 .8 3.5 1.3 5.3.6 2 .8 4 1.2 6 .3 1.5.8 2.2 1.6 2.2 1 0 1.3-1.1 1.6-2.4.3-1.7.6-3.6 2.3-3.6s2 1.9 2.3 3.6c.3 1.3.6 2.4 1.6 2.4.8 0 1.3-.7 1.6-2.2.4-2 .6-4 1.2-6 .5-1.8 1.3-3.3 1.3-5.3C20 5 18.5 3 16 3c-1.8 0-2.6 1-4 1S9.8 3 8 3Z"/><path d="M9.2 8.5 8.6 18M14.8 8.5l.6 9.5"/>',
+    extraction: '<path d="M8 8c-2 0-3 1.5-3 3.3 0 1.5.6 2.6 1 3.9.4 1.4.5 2.8.9 4.2.2 1 .6 1.6 1.2 1.6.7 0 1-.8 1.2-1.7.2-1.2.4-2.5 1.7-2.5s1.5 1.3 1.7 2.5c.2.9.5 1.7 1.2 1.7.6 0 1-.6 1.2-1.6.4-1.4.5-2.8.9-4.2.4-1.3 1-2.4 1-3.9C17 9.5 16 8 14 8c-1.2 0-1.8.7-3 .7S9.2 8 8 8Z" transform="translate(1 0)"/><path d="M12 2v3.5M9.5 4 12 1.8 14.5 4"/>',
+    hygiene: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="m6.3 6.3 2.1 2.1M15.6 15.6l2.1 2.1M6.3 17.7l2.1-2.1M15.6 8.4l2.1-2.1"/><circle cx="12" cy="12" r="2.2"/>',
+    crown: '<path d="M3.5 8.5 7.5 12 12 6l4.5 6 4-3.5-1.8 9.5H5.3L3.5 8.5Z"/><path d="M5.5 21h13"/>',
+    denture: '<path d="M3 9c2.5 6 15.5 6 18 0"/><path d="M5 11.5c3 4.5 11 4.5 14 0"/><path d="M8 12.6v1.9M12 13.3v2M16 12.6v1.9"/>',
+    whitening: '<path d="M12 3c.6 3.6 2.4 5.4 6 6-3.6.6-5.4 2.4-6 6-.6-3.6-2.4-5.4-6-6 3.6-.6 5.4-2.4 6-6Z"/><path d="M18.5 15.5c.3 1.5 1 2.2 2.5 2.5-1.5.3-2.2 1-2.5 2.5-.3-1.5-1-2.2-2.5-2.5 1.5-.3 2.2-1 2.5-2.5Z"/>',
+    chat: '<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9.5h8M8 12.5h5"/>',
+    heart: '<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20Z"/>',
+    shield: '<path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6L12 3Z"/><path d="m8.8 12 2.2 2.2 4.2-4.4"/>',
+    check: '<circle cx="12" cy="12" r="9"/><path d="m8 12.2 2.8 2.8L16.2 9.5"/>'
+  };
+
+  function icon(name, className) {
+    var svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("class", "line-icon" + (className ? " " + className : ""));
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "1.6");
+    svg.setAttribute("stroke-linecap", "round");
+    svg.setAttribute("stroke-linejoin", "round");
+    svg.innerHTML = ICONS[name] || ICONS.tooth;
+    return svg;
+  }
+
+  function spriteIcon(id, className) {
+    var svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("class", className || "icon");
+    var use = document.createElementNS(SVG_NS, "use");
+    use.setAttribute("href", "#" + id);
+    svg.appendChild(use);
+    return svg;
   }
 
   /* ---------- Single fields: <span data-field="city"> ---------- */
   document.querySelectorAll("[data-field]").forEach(function (node) {
     var value = get(node.getAttribute("data-field"));
-    if (value !== undefined) setText(node, value);
+    if (value === undefined) return;
+    setText(node, value);
+    if (isEmpty(value)) node.hidden = true;
   });
-
-  /* ---------- Location line: "Clinic, City, Country" ---------- */
-  var locationText = document.getElementById("location-text");
-  if (locationText) {
-    var parts = [S.clinicName, S.city, S.country].filter(function (p) { return !isEmpty(p); });
-    parts.forEach(function (part, i) {
-      if (i > 0) locationText.appendChild(document.createTextNode(", "));
-      locationText.appendChild(el("span", null, part));
-    });
-    if (!parts.length) locationText.parentNode.hidden = true;
-  }
 
   /* ---------- Page title & description ---------- */
   var name = S.fullName || "";
   var title = S.title || "Dentist";
-  document.title = isPlaceholder(name) || isEmpty(name) ? title : name + " — " + title;
-  if (!isPlaceholder(S.tagline) && !isEmpty(S.tagline)) {
+  document.title = isFilled(name) ? name + " — " + title : title;
+  if (isFilled(S.tagline)) {
     var meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", S.tagline);
   }
 
-  /* ---------- Avatar: photo, initials, or a tooth icon ---------- */
-  var avatar = document.getElementById("avatar");
+  /* ---------- Location: "City, Country" ---------- */
+  var locationText = byId("location-text");
+  if (locationText) {
+    [S.city, S.country].filter(function (p) { return !isEmpty(p); }).forEach(function (part, i) {
+      if (i > 0) locationText.appendChild(document.createTextNode(", "));
+      locationText.appendChild(el("span", null, part));
+    });
+  }
+
+  /* ---------- Hero badges ---------- */
+  var badges = byId("hero-badges");
+  if (badges) {
+    list(S.heroBadges).forEach(function (text) {
+      if (isEmpty(text)) return;
+      var li = el("li", "badge");
+      li.appendChild(icon("check", "badge-icon"));
+      li.appendChild(el("span", null, text));
+      badges.appendChild(li);
+    });
+    if (!badges.children.length) badges.hidden = true;
+  }
+
+  /* ---------- Portrait: photo, initials, or a tooth mark ---------- */
+  var avatar = byId("avatar");
   if (avatar) {
     if (!isEmpty(S.photo)) {
       var img = el("img");
       img.src = S.photo;
-      img.alt = "";
-      img.width = 160;
-      img.height = 160;
+      img.alt = isFilled(name) ? "Portrait of " + name : "Portrait";
+      img.width = 480;
+      img.height = 600;
       avatar.appendChild(img);
       avatar.classList.add("has-photo");
-    } else if (!isPlaceholder(name) && !isEmpty(name)) {
-      var initials = name
-        .replace(/^(dr\.?|doctor)\s+/i, "")
-        .split(/\s+/)
-        .filter(Boolean)
-        .map(function (part) { return part.charAt(0).toUpperCase(); });
-      avatar.textContent = initials.length > 1
-        ? initials[0] + initials[initials.length - 1]
-        : initials.join("");
     } else {
-      avatar.innerHTML =
-        '<svg viewBox="0 0 64 64" class="avatar-icon"><path d="M20 6c-7 0-12 5.5-12 13.5 0 6 2.4 10.4 4 15.5 1.7 5.5 2.3 11 3.6 16.5C16.6 56 18.3 58 20.5 58c2.7 0 3.7-3 4.4-6.5.9-4.6 1.6-10.5 7.1-10.5s6.2 5.9 7.1 10.5c.7 3.5 1.7 6.5 4.4 6.5 2.2 0 3.9-2 4.9-6.5 1.3-5.5 1.9-11 3.6-16.5 1.6-5.1 4-9.5 4-15.5C56 11.5 51 6 44 6c-5 0-7.5 2.5-12 2.5S25 6 20 6Z"/></svg>';
+      var mono = el("span", "portrait-mono");
+      mono.setAttribute("aria-hidden", "true");
+      if (isFilled(name)) {
+        var initials = name
+          .replace(/^(dr\.?|doctor)\s+/i, "")
+          .split(/\s+/)
+          .filter(Boolean)
+          .map(function (part) { return part.charAt(0).toUpperCase(); });
+        mono.textContent = initials.length > 1
+          ? initials[0] + initials[initials.length - 1]
+          : initials.join("");
+      } else {
+        mono.appendChild(spriteIcon("i-tooth", "portrait-icon"));
+      }
+      avatar.appendChild(mono);
     }
   }
 
+  if (isEmpty(S.heroNote)) {
+    var note = document.querySelector(".float-card-quote");
+    if (note) note.hidden = true;
+  }
+
+  /* ---------- Values strip ---------- */
+  var values = byId("values-list");
+  if (values) {
+    list(S.values).forEach(function (v) {
+      var li = el("li", "value reveal");
+      var ic = el("span", "value-icon");
+      ic.appendChild(icon(v.icon));
+      li.appendChild(ic);
+      var body = el("div");
+      body.appendChild(el("h3", "value-title", v.title));
+      body.appendChild(el("p", null, v.text));
+      li.appendChild(body);
+      values.appendChild(li);
+    });
+    if (!values.children.length) values.closest("section").hidden = true;
+  }
+
   /* ---------- About ---------- */
-  var about = document.getElementById("about-text");
+  var about = byId("about-text");
   if (about) {
-    (S.about || []).forEach(function (paragraph) {
+    list(S.about).forEach(function (paragraph) {
       if (!isEmpty(paragraph)) about.appendChild(el("p", null, paragraph));
     });
   }
-
-  /* ---------- Qualifications ---------- */
-  var quals = document.getElementById("qualifications-list");
-  if (quals) {
-    (S.qualifications || []).forEach(function (q) {
-      var li = el("li", "card");
-      li.appendChild(el("h3", "card-title", q.title));
-      var metaLine = el("p", "card-meta");
-      metaLine.appendChild(el("span", null, q.place));
-      if (!isEmpty(q.year)) {
-        metaLine.appendChild(document.createTextNode(" · "));
-        metaLine.appendChild(el("span", null, q.year));
-      }
-      li.appendChild(metaLine);
-      quals.appendChild(li);
-    });
-  }
-  if (isEmpty(S.registration)) {
-    var reg = document.getElementById("registration-line");
-    if (reg) reg.hidden = true;
+  if (isEmpty(S.aboutQuote)) {
+    var quote = document.querySelector(".pull-quote");
+    if (quote) quote.hidden = true;
   }
 
   /* ---------- Services ---------- */
-  var services = document.getElementById("services-list");
+  var services = byId("services-list");
   if (services) {
-    (S.services || []).forEach(function (s) {
-      var li = el("li", "service");
+    list(S.services).forEach(function (s) {
+      var li = el("li", "service reveal");
+      var ic = el("span", "service-icon");
+      ic.appendChild(icon(s.icon));
+      li.appendChild(ic);
       li.appendChild(el("h3", "service-title", s.name));
       li.appendChild(el("p", null, s.text));
       services.appendChild(li);
     });
+    if (!services.children.length) services.closest("section").hidden = true;
   }
 
-  /* ---------- Experience ---------- */
-  var exp = document.getElementById("experience-list");
+  /* ---------- First visit steps ---------- */
+  var journey = byId("journey-list");
+  if (journey) {
+    list(S.firstVisit).forEach(function (step, i) {
+      var li = el("li", "step reveal");
+      li.appendChild(el("span", "step-num", String(i + 1).padStart(2, "0")));
+      li.appendChild(el("h3", "step-title", step.title));
+      li.appendChild(el("p", null, step.text));
+      journey.appendChild(li);
+    });
+    if (!journey.children.length) journey.closest("section").hidden = true;
+  }
+
+  /* ---------- Qualifications & experience timelines ---------- */
+  function timelineItem(period, heading, place, details) {
+    var li = el("li", "timeline-item");
+    if (!isEmpty(period)) li.appendChild(el("p", "timeline-period", period));
+    li.appendChild(el("h4", "timeline-role", heading));
+    if (!isEmpty(place)) li.appendChild(el("p", "timeline-place", place));
+    if (!isEmpty(details)) li.appendChild(el("p", "timeline-details", details));
+    return li;
+  }
+
+  var quals = byId("qualifications-list");
+  if (quals) {
+    list(S.qualifications).forEach(function (q) {
+      quals.appendChild(timelineItem(q.year, q.title, q.place));
+    });
+  }
+  if (isEmpty(S.registration)) {
+    var reg = byId("registration-line");
+    if (reg) reg.hidden = true;
+  }
+
+  var exp = byId("experience-list");
   if (exp) {
-    (S.experience || []).forEach(function (job) {
-      var li = el("li", "timeline-item");
-      li.appendChild(el("p", "timeline-period", job.period));
-      li.appendChild(el("h3", "timeline-role", job.role));
-      li.appendChild(el("p", "timeline-place", job.place));
-      if (!isEmpty(job.details)) li.appendChild(el("p", "timeline-details", job.details));
-      exp.appendChild(li);
+    list(S.experience).forEach(function (job) {
+      exp.appendChild(timelineItem(job.period, job.role, job.place, job.details));
     });
   }
 
-  /* ---------- Contact buttons ---------- */
-  var icons = {
-    whatsapp: '<path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.3-.4.8-1.2.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/>',
-    email: '<path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm1 2.4V17h16V7.4l-8 5.3-8-5.3ZM5.6 7 12 11.2 18.4 7H5.6Z"/>',
-    instagram: '<path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm5.3-3.3a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/>'
-  };
+  /* ---------- Reviews (only shown when genuine reviews are added) ---------- */
+  var reviews = byId("reviews-list");
+  if (reviews && list(S.reviews).length) {
+    list(S.reviews).forEach(function (r) {
+      var li = el("li", "review reveal");
+      var fig = el("figure");
+      var bq = el("blockquote");
+      bq.appendChild(el("p", null, r.quote));
+      fig.appendChild(bq);
+      fig.appendChild(el("figcaption", null, r.name));
+      li.appendChild(fig);
+      reviews.appendChild(li);
+    });
+    byId("reviews").hidden = false;
+  }
 
-  var contact = S.contact || {};
-  var channels = [
-    {
-      key: "whatsapp",
-      label: "WhatsApp",
-      value: contact.whatsapp,
-      display: function (v) { return "+" + String(v).replace(/\D/g, ""); },
-      href: function (v) { return "https://wa.me/" + String(v).replace(/\D/g, ""); }
-    },
-    {
-      key: "email",
-      label: "Email",
-      value: contact.email,
-      display: function (v) { return v; },
-      href: function (v) { return "mailto:" + v; }
-    },
-    {
-      key: "instagram",
-      label: "Instagram",
-      value: contact.instagram,
-      display: function (v) { return "@" + String(v).replace(/^@/, ""); },
-      href: function (v) { return "https://www.instagram.com/" + encodeURIComponent(String(v).replace(/^@/, "")) + "/"; }
+  /* ---------- FAQ (native <details> accordion) ---------- */
+  var faq = byId("faq-list");
+  if (faq) {
+    list(S.faqs).forEach(function (item, i) {
+      var d = el("details", "faq-item");
+      if (i === 0) d.open = true;
+      var s = el("summary");
+      s.appendChild(el("span", null, item.q));
+      var plus = el("span", "faq-plus");
+      plus.setAttribute("aria-hidden", "true");
+      s.appendChild(plus);
+      d.appendChild(s);
+      d.appendChild(el("div", "faq-answer", item.a));
+      faq.appendChild(d);
+    });
+    if (!faq.children.length) faq.closest("section").hidden = true;
+  }
+
+  /* ---------- Clinic: map link & hours ---------- */
+  var mapLink = byId("map-link");
+  if (mapLink) {
+    if (isFilled(S.mapLink)) {
+      mapLink.href = S.mapLink;
+    } else if (isPlaceholder(S.mapLink)) {
+      // Not filled yet: show the placeholder text instead of a dead link.
+      var wrap = byId("map-link-wrap");
+      wrap.textContent = "";
+      wrap.appendChild(el("span", null, S.mapLink));
+    } else {
+      byId("map-link-wrap").hidden = true;
     }
+  }
+
+  var hours = byId("hours-list");
+  if (hours) {
+    list(S.hours).forEach(function (h) {
+      var row = el("div", "hours-row");
+      row.appendChild(el("dt", null, h.days));
+      row.appendChild(el("dd", null, h.time));
+      hours.appendChild(row);
+    });
+    if (!hours.children.length) byId("hours-card").hidden = true;
+  }
+
+  /* ---------- Contact ---------- */
+  var contact = S.contact || {};
+  var digits = function (v) { return String(v).replace(/\D/g, ""); };
+  var whatsappUrl = isFilled(contact.whatsapp)
+    ? "https://wa.me/" + digits(contact.whatsapp) +
+      (isFilled(S.whatsappMessage) ? "?text=" + encodeURIComponent(S.whatsappMessage) : "")
+    : null;
+  var phoneUrl = isFilled(contact.phone) ? "tel:" + String(contact.phone).replace(/[^\d+]/g, "") : null;
+
+  var channels = [
+    { key: "whatsapp",  label: "WhatsApp",  sprite: "i-whatsapp",  value: contact.whatsapp,
+      display: function (v) { return "+" + digits(v); }, href: function () { return whatsappUrl; } },
+    { key: "phone",     label: "Phone",     sprite: "i-phone",     value: contact.phone,
+      display: function (v) { return v; }, href: function () { return phoneUrl; } },
+    { key: "email",     label: "Email",     sprite: "i-mail",      value: contact.email,
+      display: function (v) { return v; }, href: function (v) { return "mailto:" + v; } },
+    { key: "instagram", label: "Instagram", sprite: "i-instagram", value: contact.instagram,
+      display: function (v) { return "@" + String(v).replace(/^@/, ""); },
+      href: function (v) { return "https://www.instagram.com/" + encodeURIComponent(String(v).replace(/^@/, "")) + "/"; } }
   ];
 
-  var list = document.getElementById("contact-list");
-  if (list) {
+  var contactList = byId("contact-list");
+  if (contactList) {
     channels.forEach(function (c) {
       if (isEmpty(c.value)) return;
       var filled = !isPlaceholder(c.value);
       var li = el("li");
       // Until a real value is entered, show a non-clickable placeholder card.
-      var link = el(filled ? "a" : "div", "contact-card contact-" + c.key);
+      var card = el(filled ? "a" : "div", "contact-card");
       if (filled) {
-        link.href = c.href(c.value);
-        if (c.key !== "email") {
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
+        card.href = c.href(c.value);
+        if (c.key === "whatsapp" || c.key === "instagram") {
+          card.target = "_blank";
+          card.rel = "noopener noreferrer";
         }
       }
-      var icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      icon.setAttribute("viewBox", "0 0 24 24");
-      icon.setAttribute("aria-hidden", "true");
-      icon.setAttribute("class", "contact-icon");
-      icon.innerHTML = icons[c.key];
-      link.appendChild(icon);
-      var textWrap = el("span", "contact-text");
-      textWrap.appendChild(el("span", "contact-label", c.label));
-      textWrap.appendChild(el("span", "contact-value", filled ? c.display(c.value) : c.value));
-      link.appendChild(textWrap);
-      li.appendChild(link);
-      list.appendChild(li);
+      var ic = el("span", "contact-icon");
+      ic.appendChild(spriteIcon(c.sprite));
+      card.appendChild(ic);
+      var text = el("span", "contact-text");
+      text.appendChild(el("span", "contact-label", c.label));
+      text.appendChild(el("span", "contact-value", filled ? c.display(c.value) : c.value));
+      card.appendChild(text);
+      li.appendChild(card);
+      contactList.appendChild(li);
     });
   }
 
+  // Every "Book on WhatsApp" button opens WhatsApp once a number is set;
+  // until then they scroll to the contact section.
+  if (whatsappUrl) {
+    document.querySelectorAll(".js-whatsapp").forEach(function (a) {
+      a.href = whatsappUrl;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    });
+  }
+  if (phoneUrl) {
+    document.querySelectorAll(".js-call").forEach(function (a) { a.href = phoneUrl; });
+  } else if (isEmpty(contact.phone)) {
+    document.querySelectorAll(".js-call").forEach(function (a) { a.hidden = true; });
+  }
+
   /* ---------- Footer year ---------- */
-  var year = document.getElementById("year");
+  var year = byId("year");
   if (year) year.textContent = new Date().getFullYear();
+
+  /* ---------- Header: shadow on scroll ---------- */
+  var header = byId("site-header");
+  if (header) {
+    var onScroll = function () { header.classList.toggle("is-scrolled", window.scrollY > 8); };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
 
   /* ---------- Mobile menu ---------- */
   var toggle = document.querySelector(".nav-toggle");
-  var nav = document.getElementById("site-nav");
+  var nav = byId("site-nav");
   if (toggle && nav) {
     var setOpen = function (open) {
       toggle.setAttribute("aria-expanded", String(open));
@@ -223,5 +397,21 @@
         toggle.focus();
       }
     });
+  }
+
+  /* ---------- Gentle fade-in on scroll ---------- */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var revealables = document.querySelectorAll(".reveal");
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("js-reveal");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    revealables.forEach(function (node) { io.observe(node); });
   }
 })();
