@@ -1,0 +1,88 @@
+/* CV page — A4, prints cleanly to PDF. */
+:root {
+  --ink: #10272a;
+  --muted: #55696b;
+  --line: #dfe7e5;
+  --accent: #0d6b70;
+  --sand: #c9a77c;
+  --placeholder-bg: #fff6d6;
+  --placeholder-border: #c99a00;
+  --placeholder-text: #6b5200;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0; background: #e9efee; color: var(--ink);
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 10.5pt; line-height: 1.5; -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+
+.toolbar {
+  position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; padding: .75rem 16px; background: #fff; border-bottom: 1px solid var(--line); font-size: 14px;
+}
+.toolbar a { font-weight: 600; }
+.toolbar button {
+  font: inherit; font-weight: 600; color: #fff; background: var(--accent);
+  border: 0; border-radius: 999px; padding: .6rem 1.2rem; cursor: pointer; min-height: 44px;
+}
+
+.page {
+  width: 210mm; max-width: calc(100% - 32px); min-height: 297mm; margin: 24px auto;
+  padding: 18mm 18mm 16mm; background: #fff; box-shadow: 0 10px 40px rgba(16, 39, 42, .12);
+}
+@media (max-width: 640px) { .page { padding: 24px 18px; min-height: 0; } }
+
+.cv-head { padding-bottom: 5mm; margin-bottom: 5mm; border-bottom: 2px solid var(--accent); }
+.cv-head h1 {
+  margin: 0 0 1.5mm; font-family: "Fraunces", Georgia, serif; font-weight: 500;
+  font-size: 26pt; line-height: 1.1; letter-spacing: -.01em;
+}
+.cv-headline { margin: 0 0 2mm; font-weight: 600; color: var(--accent); font-size: 11pt; }
+.cv-contact { margin: 0; color: var(--muted); font-size: 9.5pt; display: flex; flex-wrap: wrap; gap: .2rem .55rem; }
+.cv-contact .sep { color: var(--sand); }
+
+.cv-section { margin-bottom: 5mm; break-inside: avoid; }
+.cv-section h2 {
+  margin: 0 0 2.5mm; font-size: 9pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); display: flex; align-items: center; gap: 3mm;
+}
+.cv-section h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.cv-section p { margin: 0 0 1.5mm; }
+
+.cv-entry { display: grid; grid-template-columns: 34mm 1fr; gap: 4mm; margin-bottom: 3mm; break-inside: avoid; }
+.cv-entry h3 { margin: 0; font-size: 10.5pt; font-weight: 700; }
+.cv-date { margin: 0; color: var(--muted); font-size: 9.5pt; font-weight: 600; }
+.cv-place { margin: 0 !important; color: var(--muted); }
+.cv-details { margin: .5mm 0 0 !important; }
+
+.cv-facts { margin: 0; display: grid; gap: 1.2mm; }
+.cv-fact { display: grid; grid-template-columns: 34mm 1fr; gap: 4mm; }
+.cv-fact dt { color: var(--muted); font-weight: 600; font-size: 9.5pt; }
+.cv-fact dd { margin: 0; }
+
+.cv-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+@media (max-width: 640px) {
+  .cv-columns { grid-template-columns: 1fr; }
+  .cv-entry, .cv-fact { grid-template-columns: 1fr; gap: 0; }
+}
+.cv-bullets { margin: 0; padding-left: 4mm; }
+.cv-bullets li { margin-bottom: 1mm; }
+.cv-bullets li::marker { color: var(--sand); }
+
+.is-placeholder {
+  background: var(--placeholder-bg); color: var(--placeholder-text);
+  outline: 1px dashed var(--placeholder-border); outline-offset: 1px; border-radius: 3px; padding: 0 .15em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+@page { size: A4; margin: 0; }
+@media print {
+  body { background: #fff; }
+  .toolbar { display: none; }
+  .page { margin: 0; width: auto; max-width: none; min-height: 0; box-shadow: none; padding: 16mm 18mm; }
+  a { color: var(--ink); }
+}

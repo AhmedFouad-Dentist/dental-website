@@ -4,6 +4,15 @@ Personal website for a dentist working in the **United Kingdom**. It's a plain s
 
 > **Do not publish yet.** In the UK it is a criminal offence for anyone not on the General Dental Council (GDC) register to use the title "dentist" or to imply they are a registered dentist (Dentists Act 1984, section 39). Keep GitHub Pages **off** until your GDC registration is confirmed. See the checklist below.
 
+## Two modes: job search now, patients later
+
+`content.js` starts with `mode: "job"`:
+
+- **`"job"` (now):** the site is a professional profile for practice owners and recruiters. It has no "Dentist" title, no booking and no patient sections. It shows clinical experience, what you're looking for, CPD, skills and a **Download CV** button. Fill in the `job: { ... }` details.
+- **`"patients"` (after GDC registration):** change it to `mode: "patients"` and the full patient website appears (services, NHS & private, FAQ, booking, GDC number).
+
+**The CV** (`cv.html`) is built automatically from the same `content.js`. Open it and click **Save as PDF** to get an A4 PDF to send with applications.
+
 ## Files
 
 | File | What it is |
@@ -12,6 +21,7 @@ Personal website for a dentist working in the **United Kingdom**. It's a plain s
 | `index.html` | Page structure (sections, headings). |
 | `assets/style.css` | Design: colours, layout, light/dark mode. |
 | `assets/main.js` | Puts the content from `content.js` into the page. No need to edit it. |
+| `cv.html`, `assets/cv.js`, `assets/cv.css` | The CV page, built from `content.js`. |
 | `assets/favicon.svg` | Browser tab icon. |
 | `.nojekyll` | Tells GitHub Pages to serve the files as they are. |
 
@@ -27,6 +37,17 @@ Personal website for a dentist working in the **United Kingdom**. It's a plain s
 Until a placeholder is filled in, the site shows it with a **dashed yellow outline** so you can see what's missing.
 
 ### Placeholders to fill (TODO)
+
+**For job mode and the CV (do these first):**
+
+- [ ] `fullName` (without "Dr" until GDC registered), `qualification`, `qualificationCountry`
+- [ ] `job.status`, `job.seeking`, `job.preferredLocation`, `job.availableFrom`, `job.rightToWork`
+- [ ] `job.email`, `job.phone`, `job.linkedin`
+- [ ] `job.highlights`, `job.statement`, `job.clinical` (approximate case numbers help)
+- [ ] `job.cpd`, `job.skills`, `job.languages`, `job.memberships`
+- [ ] `about`, `aboutQuote`, `qualifications`, `experience`
+
+**For patient mode (after GDC registration):**
 
 - [ ] `fullName`: [Full name] (UK style: `Dr First Last`, no full stop)
 - [ ] `tagline`: one-sentence introduction

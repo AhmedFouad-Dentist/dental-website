@@ -4,6 +4,12 @@
   "use strict";
 
   var S = window.SITE || {};
+  var MODE = S.mode === "patients" ? "patients" : "job";
+  var JOB = S.job || {};
+  // In job mode the header shows e.g. "BDS · ORE" instead of "Dentist".
+  if (MODE === "job") {
+    S = Object.assign({}, S, { title: JOB.roleLabel || "", heroBadges: JOB.highlights || [] });
+  }
   var SVG_NS = "http://www.w3.org/2000/svg";
 
   // A value counts as a placeholder while it still contains [square brackets].
@@ -114,7 +120,9 @@
       }
       parts.push(q);
     }
-    if (!isEmpty(S.gdcNumber)) {
+    if (MODE === "job") {
+      if (!isEmpty(JOB.status)) parts.push(el("span", null, JOB.status));
+    } else if (!isEmpty(S.gdcNumber)) {
       var g = el("span");
       g.appendChild(document.createTextNode("GDC No. "));
       g.appendChild(el("span", null, S.gdcNumber));
@@ -235,6 +243,44 @@
       services.appendChild(li);
     });
     if (!services.children.length) services.closest("section").hidden = true;
+  }
+
+  /* ---------- Job mode: clinical experience, what I'm looking for, CPD, skills ---------- */
+  var clinical = byId("clinical-list");
+  if (clinical) {
+    list(JOB.clinical).forEach(function (c) {
+      var li = el("li", "service reveal");
+      li.appendChild(el("h3", "service-title", c.area));
+      li.appendChild(el("p", null, c.detail));
+      clinical.appendChild(li);
+    });
+  }
+
+  var seeking = byId("seeking-list");
+  if (seeking) {
+    [["Role", JOB.seeking], ["Location", JOB.preferredLocation],
+     ["Available from", JOB.availableFrom], ["Right to work", JOB.rightToWork]].forEach(function (row) {
+      if (isEmpty(row[1])) return;
+      var div = el("div", "seeking-row");
+      div.appendChild(el("dt", null, row[0]));
+      div.appendChild(el("dd", null, row[1]));
+      seeking.appendChild(div);
+    });
+    if (!seeking.children.length) seeking.closest(".seeking-panel").hidden = true;
+  }
+
+  var cpd = byId("cpd-list");
+  if (cpd) {
+    list(JOB.cpd).forEach(function (c) {
+      cpd.appendChild(timelineItem(c.year, c.title, c.provider));
+    });
+  }
+
+  var skills = byId("skills-list");
+  if (skills) {
+    list(JOB.skills).concat(list(JOB.languages), list(JOB.memberships)).forEach(function (t) {
+      if (!isEmpty(t)) skills.appendChild(el("li", "tag", t));
+    });
   }
 
   /* ---------- NHS & private cards ---------- */
@@ -381,6 +427,19 @@
       href: function (v) { return "https://www.instagram.com/" + encodeURIComponent(String(v).replace(/^@/, "")) + "/"; } }
   ];
 
+  if (MODE === "job") {
+    // Recruiters get your own email, phone and LinkedIn instead of the practice's.
+    channels = [
+      { key: "email",    label: "Email",    sprite: "i-mail",     value: JOB.email,
+        display: function (v) { return v; }, href: function (v) { return "mailto:" + v; } },
+      { key: "phone",    label: "Phone",    sprite: "i-phone",    value: JOB.phone,
+        display: function (v) { return v; },
+        href: function (v) { return "tel:" + String(v).replace(/[^\d+]/g, ""); } },
+      { key: "linkedin", label: "LinkedIn", sprite: "i-linkedin", value: JOB.linkedin,
+        display: function () { return "View profile"; }, href: function (v) { return v; } }
+    ];
+  }
+
   var contactList = byId("contact-list");
   if (contactList) {
     channels.forEach(function (c) {
@@ -417,11 +476,26 @@
       a.rel = "noopener noreferrer";
     });
   }
+  // "Download CV" buttons.
+  if (!isEmpty(JOB.cvLink)) {
+    document.querySelectorAll(".js-cv").forEach(function (a) {
+      a.href = JOB.cvLink;
+      a.target = "_blank";
+      a.rel = "noopener";
+    });
+  }
+
   if (phoneUrl) {
     document.querySelectorAll(".js-call").forEach(function (a) { a.href = phoneUrl; });
   } else if (isEmpty(contact.phone)) {
     document.querySelectorAll(".js-call").forEach(function (a) { a.hidden = true; });
   }
+
+  /* ---------- Show only the parts for the current mode ---------- */
+  document.body.classList.add("mode-" + MODE);
+  document.querySelectorAll("[data-mode]").forEach(function (node) {
+    if (node.getAttribute("data-mode") !== MODE) node.hidden = true;
+  });
 
   /* ---------- Footer year ---------- */
   var year = byId("year");

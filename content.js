@@ -18,8 +18,78 @@
    ===================================================================== */
 
 window.SITE = {
+  /* =================================================================
+     MODE
+     "job"      → now, while job hunting and before GDC registration.
+                  The site is a professional profile for practice owners
+                  and recruiters: no "Dentist" title, no booking, no
+                  patient sections. Uses the "job" details just below.
+     "patients" → after GDC registration: the full patient website.
+     ================================================================= */
+  mode: "job",
+
+  /* ---------- Job-search details (also used for the CV page, cv.html) ---------- */
+  job: {
+    roleLabel: "BDS · ORE",          // shown instead of "Dentist" in job mode
+    status: "[e.g. ORE Part 2 passed (Month year) · GDC registration in progress]",
+    seeking: "[e.g. Associate or PLVE position in a mixed NHS/private practice]",
+    preferredLocation: "[e.g. London and the South East, or open to relocation]",
+    availableFrom: "[e.g. January 2027]",
+    rightToWork: "[e.g. Requires Skilled Worker visa sponsorship / Full right to work in the UK]",
+
+    /* Contact details for recruiters (your own, not the practice's). */
+    email: "[Your email]",
+    phone: "[Your phone number]",
+    linkedin: "[LinkedIn profile link]",
+
+    /* Two short facts under your name. */
+    highlights: [
+      "[e.g. 4 years in general practice]",
+      "[e.g. 300+ root canal treatments]"
+    ],
+
+    /* Personal statement for the CV: 3–5 lines. */
+    statement: "[Personal statement — who you are, your clinical experience, what you are looking for and what you bring to a practice.]",
+
+    /* Clinical experience by area. Approximate case numbers help practice owners. */
+    clinical: [
+      { area: "Endodontics",          detail: "[e.g. approx. number of root canal treatments, including molars]" },
+      { area: "Restorative",          detail: "[e.g. composites, crowns, bridges — approx. numbers]" },
+      { area: "Oral surgery",         detail: "[e.g. simple and surgical extractions — approx. numbers]" },
+      { area: "Periodontics",         detail: "[e.g. non-surgical periodontal therapy]" },
+      { area: "Prosthodontics",       detail: "[e.g. partial and complete dentures]" },
+      { area: "Paediatric dentistry", detail: "[e.g. experience treating children]" }
+    ],
+
+    /* Courses and CPD (newest first). */
+    cpd: [
+      { title: "[Course name]", provider: "[Provider]", year: "[Year]" },
+      { title: "[Course name]", provider: "[Provider]", year: "[Year]" }
+    ],
+
+    /* Skills, practice software, languages, memberships. */
+    skills: [
+      "[Practice software, e.g. SOE, R4, Dentally]",
+      "[Other skill, e.g. digital radiography]"
+    ],
+    languages: [
+      "English ([level, e.g. IELTS 7.5])",
+      "Arabic (native)"
+    ],
+    memberships: [
+      "[e.g. British Dental Association (BDA) member]"
+    ],
+    references: "Available on request",
+
+    /* The "Download CV" buttons open this. cv.html builds the CV from this
+       file; use its "Save as PDF" button. Or upload your own PDF to
+       assets/ and write e.g. "assets/cv.pdf". */
+    cvLink: "cv.html"
+  },
+
   /* ---------- Name & headline ---------- */
-  /* UK style is "Dr First Last" (no full stop). If your name starts with
+  /* In job mode, use your name without "Dr" until you are GDC registered.
+     UK style is "Dr First Last" (no full stop). If your name starts with
      "Dr", the site automatically adds the note that "Dr" is a courtesy
      title, as UK advertising rules expect for dentists. */
   fullName: "[Full name]",
@@ -73,14 +143,14 @@ window.SITE = {
   /* ---------- Experience (newest first) ---------- */
   experience: [
     {
-      role: "[Job title, e.g. Associate Dentist]",
-      place: "[Practice name], [Town or city]",
+      role: "[Most recent role, e.g. General Dental Practitioner]",
+      place: "[Clinic name], [City, Country]",
       period: "[Start year] – [End year or Present]",
       details: "[One or two lines about what you do there]"
     },
     {
-      role: "[Previous role, e.g. General Dentist]",
-      place: "[Clinic or hospital], [City, Country]",
+      role: "[Previous role, e.g. Internship / House officer]",
+      place: "[Hospital or clinic], [City, Country]",
       period: "[Start year] – [End year]",
       details: "[One or two lines about this role]"
     }
